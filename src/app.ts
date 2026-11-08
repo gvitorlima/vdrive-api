@@ -4,6 +4,8 @@ import { env } from "./modules/config.ts";
 
 const app: Express = express();
 
+app.use(express.json());
+
 /**
  * Monta toda a API a partir de um único ponto
  * usando como prefixo /api
