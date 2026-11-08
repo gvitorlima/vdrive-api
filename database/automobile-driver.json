@@ -1,0 +1,82 @@
+[
+  {
+    "id": "e3b0c442-989b-464c-8650-123456789012",
+    "data_inicio": "2023-10-15T08:30:00Z",
+    "data_termino": "2023-10-15T17:45:00Z",
+    "motivo_utilizacao": "Visita técnica ao cliente na filial centro",
+    "motorista": {
+      "id": "a1b2c3d4-1234-5678-9abc-def012345678",
+      "nome": "Carlos Eduardo Silva"
+    },
+    "automovel": {
+      "id": "1a2b3c4d-5678-90ab-cdef-1234567890ab",
+      "placa": "ABC1234",
+      "cor": "Prata",
+      "marca": "Toyota"
+    }
+  },
+  {
+    "id": "f4c1d553-a90c-575d-9761-234567890123",
+    "data_inicio": "2023-10-16T09:00:00Z",
+    "data_termino": "2023-10-16T12:00:00Z",
+    "motivo_utilizacao": "Transporte de equipamentos de TI",
+    "motorista": {
+      "id": "f5e6d7c8-9012-3456-7def-89abcdef0123",
+      "nome": "Ana Carolina Souza"
+    },
+    "automovel": {
+      "id": "2b3c4d5e-6789-01bc-def0-2345678901bc",
+      "placa": "XYZ9876",
+      "cor": "Preto",
+      "marca": "Honda"
+    }
+  },
+  {
+    "id": "a5d2e664-b01d-686e-0872-345678901234",
+    "data_inicio": "2023-10-17T14:00:00Z",
+    "data_termino": null,
+    "motivo_utilizacao": "Viagem intermunicipal para congresso",
+    "motorista": {
+      "id": "b9a87654-3210-fedc-ba98-76543210abcd",
+      "nome": "Marcos Roberto Costa"
+    },
+    "automovel": {
+      "id": "3c4d5e6f-7890-12cd-ef01-3456789012cd",
+      "placa": "QWE4567",
+      "cor": "Branco",
+      "marca": "Volkswagen"
+    }
+  },
+  {
+    "id": "b6e3f775-c12e-797f-1983-456789012345",
+    "data_inicio": "2023-10-18T07:15:00Z",
+    "data_termino": "2023-10-18T18:30:00Z",
+    "motivo_utilizacao": "Reunião com fornecedores",
+    "motorista": {
+      "id": "c1d2e3f4-5678-90ab-cdef-1234567890ab",
+      "nome": "Fernanda Lima Oliveira"
+    },
+    "automovel": {
+      "id": "4d5e6f7a-8901-23de-f012-4567890123de",
+      "placa": "ASD7890",
+      "cor": "Vermelho",
+      "marca": "Chevrolet"
+    }
+  },
+  {
+    "id": "c7f4a886-d23f-8080-2094-567890123456",
+    "data_inicio": "2023-10-19T10:00:00Z",
+    "data_termino": null,
+    "motivo_utilizacao": "Entrega de documentos fiscais",
+    "motorista": {
+      "id": "d5c6b7a8-9012-3456-7890-abcdef123456",
+      "nome": "Roberto Alves Pereira"
+    },
+    "automovel": {
+      "id": "5e6f7a8b-9012-34ef-0123-5678901234ef",
+      "placa": "ZXC1234",
+      "cor": "Prata",
+      "marca": "Fiat"
+    }
+  }
+]

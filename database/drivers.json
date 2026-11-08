@@ -1,0 +1,42 @@
+[
+  {
+    "id": "a1b2c3d4-1234-5678-9abc-def012345678",
+    "nome": "Carlos Eduardo Silva"
+  },
+  {
+    "id": "f5e6d7c8-9012-3456-7def-89abcdef0123",
+    "nome": "Ana Carolina Souza"
+  },
+  {
+    "id": "b9a87654-3210-fedc-ba98-76543210abcd",
+    "nome": "Marcos Roberto Costa"
+  },
+  {
+    "id": "c1d2e3f4-5678-90ab-cdef-1234567890ab",
+    "nome": "Fernanda Lima Oliveira"
+  },
+  {
+    "id": "d5c6b7a8-9012-3456-7890-abcdef123456",
+    "nome": "Roberto Alves Pereira"
+  },
+  {
+    "id": "e9f01234-5678-9abc-def0-123456789abc",
+    "nome": "Juliana Martins Santos"
+  },
+  {
+    "id": "f1a2b3c4-d5e6-f7a8-b9c0-d1e2f3a4b5c6",
+    "nome": "Pedro Henrique Rocha"
+  },
+  {
+    "id": "a9b8c7d6-e5f4-a3b2-c1d0-e9f8a7b6c5d4",
+    "nome": "Camila Mendes Gomes"
+  },
+  {
+    "id": "b1c2d3e4-f5a6-b7c8-d9e0-f1a2b3c4d5e6",
+    "nome": "Lucas Fernandes Dias"
+  },
+  {
+    "id": "c9d8e7f6-a5b4-c3d2-e1f0-a9b8c7d6e5f4",
+    "nome": "Beatriz Nogueira Carvalho"
+  }
+]
