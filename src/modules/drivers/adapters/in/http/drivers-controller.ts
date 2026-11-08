@@ -6,11 +6,6 @@ import type { CreateDriverInput } from "../../../application/inputs/create-drive
 
 const driversRouter = Router();
 
-/**
- * Como não temos algo para injetar as dependencias, vou deixar assim mesmo por hora
- */
-const createDriverUseCase: ICreateDriverUseCase = new CreateDriverUseCase();
-
 driversRouter.get("/", function (req: Request, res: Response) {
   res.json([{ id: 1, name: "Gabriel" }]);
 });
@@ -33,6 +28,11 @@ driversRouter.post("/create", async function (req: Request, res: Response) {
   }
 
   const parsedPayload = validationResult.data;
+
+  /**
+   * Como não temos algo para injetar as dependencias, vou deixar assim mesmo por hora
+   */
+  const createDriverUseCase: ICreateDriverUseCase = new CreateDriverUseCase();
   await createDriverUseCase.execute(parsedPayload as CreateDriverInput);
 
   res.status(201).json([
