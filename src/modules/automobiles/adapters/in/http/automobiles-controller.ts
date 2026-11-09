@@ -1,5 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import { NotFoundError } from "../../../../shared/domain/errors/not-found.error.ts";
+import { ResourceInUseError } from "../../../../shared/domain/errors/resource-in-use.error.ts";
 import { createAutomobileSchema } from "../dto/create-automobile.dto.ts";
 import { CreateAutomobileUseCase } from "../../../application/use-cases/create-automobile.use-case.ts";
 import type { ICreateAutomobileUseCase } from "../../../application/ports/in/create-automobile.use-case.port.ts";
@@ -174,6 +175,12 @@ automobilesRouter.delete("/:id", async function (req: Request, res: Response) {
       return res.status(404).json({
         message: err.message,
         code: 404,
+      });
+    }
+    if (err instanceof ResourceInUseError) {
+      return res.status(409).json({
+        message: err.message,
+        code: 409,
       });
     }
     throw err;

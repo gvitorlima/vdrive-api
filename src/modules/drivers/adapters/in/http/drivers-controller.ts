@@ -20,6 +20,7 @@ import { deleteDriverParamsSchema } from "../dto/delete-driver-params.dto.ts";
 import { DeleteDriverUseCase } from "../../../application/use-cases/delete-driver.use-case.ts";
 import type { IDeleteDriverUseCase } from "../../../application/ports/in/delete-driver.use-case.port.ts";
 import { NotFoundError } from "../../../../shared/domain/errors/not-found.error.ts";
+import { ResourceInUseError } from "../../../../shared/domain/errors/resource-in-use.error.ts";
 
 const driversRouter = Router();
 
@@ -172,6 +173,12 @@ driversRouter.delete("/:id", async function (req: Request, res: Response) {
       return res.status(404).json({
         message: err.message,
         code: 404,
+      });
+    }
+    if (err instanceof ResourceInUseError) {
+      return res.status(409).json({
+        message: err.message,
+        code: 409,
       });
     }
     throw err;
