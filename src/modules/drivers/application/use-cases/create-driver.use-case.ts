@@ -1,4 +1,5 @@
 import { DriverRepositoryAdapter } from "../../adapters/out/driver-repository.adapter.ts";
+import type { Driver } from "../../domain/entities/driver.entity.ts";
 import type { CreateDriverInput } from "../inputs/create-driver.input.ts";
 import type { ICreateDriverUseCase } from "../ports/in/create-driver.use-case.port.ts";
 import type { IDriverRepositoryPort } from "../ports/out/driver-repository.port.ts";
@@ -10,7 +11,8 @@ export class CreateDriverUseCase implements ICreateDriverUseCase {
   private readonly repository: IDriverRepositoryPort =
     new DriverRepositoryAdapter();
 
-  async execute(content: CreateDriverInput): Promise<any> {
-    await this.repository.create(content);
+  async execute(content: CreateDriverInput): Promise<Driver> {
+    return await this.repository.create(content);
   }
 }
+
