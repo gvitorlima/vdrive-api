@@ -3,8 +3,9 @@ import type { CreateDriverInput } from "../../inputs/create-driver.input.ts";
 
 export interface IDriverRepositoryPort {
   list(name?: string): Promise<Driver[]>;
-  get(): Promise<any>;
-  create(content: CreateDriverInput): Promise<any>;
-  update(): Promise<any>;
-  delete(): Promise<any>;
+  findById(id: string): Promise<Driver | null>;
+  create(content: CreateDriverInput): Promise<Driver>;
+  update(driver: Driver): Promise<Driver>;
+  delete(id: string): Promise<void>;
 }
+

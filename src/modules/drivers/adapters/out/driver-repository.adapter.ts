@@ -25,7 +25,6 @@ export class DriverRepositoryAdapter
      * via filter por conta do banco em memoria.
      */
     if (name) {
-      console.log(name);
       drivers = drivers.filter((driver) =>
         driver.nome.toLowerCase().includes(name.toLocaleLowerCase()),
       );
@@ -34,8 +33,42 @@ export class DriverRepositoryAdapter
     return drivers.map((driver) => new Driver(driver.id, driver.nome, true));
   }
 
-  public async get() {}
-  public async create(content: CreateDriverInput) {}
-  public async update() {}
-  public async delete() {}
+  public async findById(id: string): Promise<Driver | null> {
+    const drivers = await super.read();
+    const driver = drivers.find((driver) => driver.id === id);
+
+    if (!driver) {
+      return null;
+    }
+
+    return new Driver(driver.id, driver.nome, true);
+  }
+
+  public async create(content: CreateDriverInput): Promise<Driver> {
+    const drivers = await super.read();
+    const driver = Driver.create(content.name);
+
+    drivers.push(driver.toObject());
+    await super.save(drivers);
+
+    driver.markHasSaved();
+    return driver;
+  }
+
+  public async update(driver: Driver): Promise<Driver> {
+    const drivers = await super.read();
+
+    const updated = drivers.map((d) =>
+      d.id === driver.getId() ? driver.toObject() : d,
+    );
+
+    await super.save(updated);
+    return driver;
+  }
+
+  public async delete(id: string): Promise<void> {
+    const drivers = await super.read();
+    const filtered = drivers.filter((driver) => driver.id !== id);
+    await super.save(filtered);
+  }
 }

@@ -1,7 +1,8 @@
-import { access, accessSync, readFileSync } from "node:fs";
+import { accessSync, readFileSync, writeFileSync } from "node:fs";
 
 export abstract class JsonFileRepository<T, M> {
   public filePath: string;
+
   constructor(filePath: string) {
     this.filePath = filePath;
   }
@@ -11,12 +12,12 @@ export abstract class JsonFileRepository<T, M> {
       throw new Error("Database is not defined");
     }
 
-    const content = await readFileSync(this.filePath, "utf-8");
+    const content = readFileSync(this.filePath, "utf-8");
     return JSON.parse(content);
   }
 
-  protected async save(): Promise<boolean> {
-    return true;
+  protected async save(data: T[]): Promise<void> {
+    writeFileSync(this.filePath, JSON.stringify(data, null, 2), "utf-8");
   }
 
   private async existFile(): Promise<boolean> {
