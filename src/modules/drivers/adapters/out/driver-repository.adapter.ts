@@ -1,6 +1,5 @@
 import path from "node:path";
 import { JsonFileRepository } from "../../../shared/infra/persistence/json-file.repository.ts";
-import type { CreateDriverInput } from "../../application/inputs/create-driver.input.ts";
 import type { IDriverRepositoryPort } from "../../application/ports/out/driver-repository.port.ts";
 import { Driver } from "../../domain/entities/driver.entity.ts";
 
@@ -44,9 +43,8 @@ export class DriverRepositoryAdapter
     return new Driver(driver.id, driver.nome, true);
   }
 
-  public async create(content: CreateDriverInput): Promise<Driver> {
+  public async create(driver: Driver): Promise<Driver> {
     const drivers = await super.read();
-    const driver = Driver.create(content.name);
 
     drivers.push(driver.toObject());
     await super.save(drivers);
