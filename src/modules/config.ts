@@ -8,6 +8,9 @@ dotenv.config();
  */
 const envSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+  DATABASE_DIR: z
+    .string()
+    .default(process.env.NODE_ENV === "test" ? "tests/database" : "database"),
 });
 
 const validationResult = envSchema.safeParse(process.env);

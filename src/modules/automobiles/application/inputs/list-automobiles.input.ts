@@ -1,4 +1,4 @@
 export type ListAutomobilesInput = {
-  color: string | undefined;
-  brand: string | undefined;
+  color?: string;
+  brand?: string;
 };

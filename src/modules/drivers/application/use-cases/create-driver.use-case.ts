@@ -5,11 +5,13 @@ import type { ICreateDriverUseCase } from "../ports/in/create-driver.use-case.po
 import type { IDriverRepositoryPort } from "../ports/out/driver-repository.port.ts";
 
 export class CreateDriverUseCase implements ICreateDriverUseCase {
-  /**
-   * Mesma coisa, sem injeção de dependencias...
-   */
-  private readonly repository: IDriverRepositoryPort =
-    new DriverRepositoryAdapter();
+  private readonly repository: IDriverRepositoryPort;
+
+  constructor(
+    repository: IDriverRepositoryPort = new DriverRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+  }
 
   async execute(content: CreateDriverInput): Promise<Driver> {
     const driver = Driver.create(content.name);

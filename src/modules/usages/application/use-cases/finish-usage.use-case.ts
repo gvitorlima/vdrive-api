@@ -6,8 +6,13 @@ import type { IFinishUsageUseCase } from "../ports/in/finish-usage.use-case.port
 import type { IUsageRepositoryPort } from "../ports/out/usage-repository.port.ts";
 
 export class FinishUsageUseCase implements IFinishUsageUseCase {
-  private readonly repository: IUsageRepositoryPort =
-    new UsageRepositoryAdapter();
+  private readonly repository: IUsageRepositoryPort;
+
+  constructor(
+    repository: IUsageRepositoryPort = new UsageRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+  }
 
   async execute(input: FinishUsageInput): Promise<Usage> {
     const usage = await this.repository.findById(input.id);

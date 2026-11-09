@@ -8,10 +8,16 @@ import type { IUsageRepositoryPort } from "../../../usages/application/ports/out
 import { UsageRepositoryAdapter } from "../../../usages/adapters/out/usage-repository.adapter.ts";
 
 export class GetAutomobileUseCase implements IGetAutomobileUseCase {
-  private readonly repository: IAutomobileRepositoryPort =
-    new AutomobileRepositoryAdapter();
-  private readonly usageRepository: IUsageRepositoryPort =
-    new UsageRepositoryAdapter();
+  private readonly repository: IAutomobileRepositoryPort;
+  private readonly usageRepository: IUsageRepositoryPort;
+
+  constructor(
+    repository: IAutomobileRepositoryPort = new AutomobileRepositoryAdapter(),
+    usageRepository: IUsageRepositoryPort = new UsageRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+    this.usageRepository = usageRepository;
+  }
 
   async execute(input: GetAutomobileInput): Promise<AutomobileOutput> {
     const automobile = await this.repository.findById(input.id);

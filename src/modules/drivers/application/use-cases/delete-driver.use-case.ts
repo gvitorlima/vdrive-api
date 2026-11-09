@@ -8,11 +8,16 @@ import type { IDriverRepositoryPort } from "../ports/out/driver-repository.port.
 import type { IUsageRepositoryPort } from "../../../usages/application/ports/out/usage-repository.port.ts";
 
 export class DeleteDriverUseCase implements IDeleteDriverUseCase {
-  private readonly repository: IDriverRepositoryPort =
-    new DriverRepositoryAdapter();
+  private readonly repository: IDriverRepositoryPort;
+  private readonly usageRepository: IUsageRepositoryPort;
 
-  private readonly usageRepository: IUsageRepositoryPort =
-    new UsageRepositoryAdapter();
+  constructor(
+    repository: IDriverRepositoryPort = new DriverRepositoryAdapter(),
+    usageRepository: IUsageRepositoryPort = new UsageRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+    this.usageRepository = usageRepository;
+  }
 
   async execute(input: DeleteDriverInput): Promise<void> {
     const existing = await this.repository.findById(input.id);

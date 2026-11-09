@@ -5,8 +5,13 @@ import type { ICreateAutomobileUseCase } from "../ports/in/create-automobile.use
 import type { IAutomobileRepositoryPort } from "../ports/out/automobile-repository.port.ts";
 
 export class CreateAutomobileUseCase implements ICreateAutomobileUseCase {
-  private readonly repository: IAutomobileRepositoryPort =
-    new AutomobileRepositoryAdapter();
+  private readonly repository: IAutomobileRepositoryPort;
+
+  constructor(
+    repository: IAutomobileRepositoryPort = new AutomobileRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+  }
 
   async execute(input: CreateAutomobileInput): Promise<Automobile> {
     const automobile = Automobile.create(input.plate, input.color, input.brand);

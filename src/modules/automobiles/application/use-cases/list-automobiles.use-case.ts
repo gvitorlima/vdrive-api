@@ -7,11 +7,16 @@ import type { IUsageRepositoryPort } from "../../../usages/application/ports/out
 import { UsageRepositoryAdapter } from "../../../usages/adapters/out/usage-repository.adapter.ts";
 
 export class ListAutomobilesUseCase implements IListAutomobilesUseCase {
-  private readonly repository: IAutomobileRepositoryPort =
-    new AutomobileRepositoryAdapter();
+  private readonly repository: IAutomobileRepositoryPort;
+  private readonly usageRepository: IUsageRepositoryPort;
 
-  private readonly usageRepository: IUsageRepositoryPort =
-    new UsageRepositoryAdapter();
+  constructor(
+    repository: IAutomobileRepositoryPort = new AutomobileRepositoryAdapter(),
+    usageRepository: IUsageRepositoryPort = new UsageRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+    this.usageRepository = usageRepository;
+  }
 
   async execute(input: ListAutomobilesInput): Promise<AutomobileOutput[]> {
     const automobiles = await this.repository.list(input.color, input.brand);

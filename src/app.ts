@@ -13,6 +13,10 @@ app.use(express.json());
 app.use("/api", apiRouter);
 
 const port = env.PORT;
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`App listening on port ${port}`);
+  });
+}
+
+export { app };

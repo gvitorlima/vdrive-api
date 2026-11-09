@@ -1,4 +1,5 @@
 import path from "node:path";
+import { env } from "../../../config.ts";
 import { JsonFileRepository } from "../../../shared/infra/persistence/json-file.repository.ts";
 import type { IDriverRepositoryPort } from "../../application/ports/out/driver-repository.port.ts";
 import { Driver } from "../../domain/entities/driver.entity.ts";
@@ -12,8 +13,10 @@ export class DriverRepositoryAdapter
   extends JsonFileRepository<DriverObject, any>
   implements IDriverRepositoryPort
 {
-  constructor() {
-    super(path.resolve(process.cwd(), "database/drivers.json"));
+  constructor(filePath?: string) {
+    super(
+      filePath ?? path.resolve(process.cwd(), env.DATABASE_DIR, "drivers.json"),
+    );
   }
 
   public async list(name?: string): Promise<Driver[]> {

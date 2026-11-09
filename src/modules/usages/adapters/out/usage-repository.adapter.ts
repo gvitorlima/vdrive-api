@@ -1,4 +1,5 @@
 import path from "node:path";
+import { env } from "../../../config.ts";
 import { JsonFileRepository } from "../../../shared/infra/persistence/json-file.repository.ts";
 import type { IUsageRepositoryPort } from "../../application/ports/out/usage-repository.port.ts";
 import { Usage } from "../../domain/entities/usage.entity.ts";
@@ -16,8 +17,11 @@ export class UsageRepositoryAdapter
   extends JsonFileRepository<UsageObject, any>
   implements IUsageRepositoryPort
 {
-  constructor() {
-    super(path.resolve(process.cwd(), "database/automobile-driver.json"));
+  constructor(filePath?: string) {
+    super(
+      filePath ??
+        path.resolve(process.cwd(), env.DATABASE_DIR, "automobile-driver.json"),
+    );
   }
 
   private mapToEntity(obj: UsageObject): Usage {

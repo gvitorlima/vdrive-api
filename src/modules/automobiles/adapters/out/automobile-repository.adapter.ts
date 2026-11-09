@@ -1,4 +1,5 @@
 import path from "node:path";
+import { env } from "../../../config.ts";
 import { JsonFileRepository } from "../../../shared/infra/persistence/json-file.repository.ts";
 import type { IAutomobileRepositoryPort } from "../../application/ports/out/automobile-repository.port.ts";
 import { Automobile } from "../../domain/entities/automobile.entity.ts";
@@ -14,8 +15,11 @@ export class AutomobileRepositoryAdapter
   extends JsonFileRepository<AutomobileObject, any>
   implements IAutomobileRepositoryPort
 {
-  constructor() {
-    super(path.resolve(process.cwd(), "database/automobiles.json"));
+  constructor(filePath?: string) {
+    super(
+      filePath ??
+        path.resolve(process.cwd(), env.DATABASE_DIR, "automobiles.json"),
+    );
   }
 
   public async list(color?: string, brand?: string): Promise<Automobile[]> {

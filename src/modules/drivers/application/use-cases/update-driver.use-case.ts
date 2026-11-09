@@ -6,8 +6,13 @@ import type { IUpdateDriverUseCase } from "../ports/in/update-driver.use-case.po
 import type { IDriverRepositoryPort } from "../ports/out/driver-repository.port.ts";
 
 export class UpdateDriverUseCase implements IUpdateDriverUseCase {
-  private readonly repository: IDriverRepositoryPort =
-    new DriverRepositoryAdapter();
+  private readonly repository: IDriverRepositoryPort;
+
+  constructor(
+    repository: IDriverRepositoryPort = new DriverRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+  }
 
   async execute(input: UpdateDriverInput): Promise<Driver> {
     const existing = await this.repository.findById(input.id);

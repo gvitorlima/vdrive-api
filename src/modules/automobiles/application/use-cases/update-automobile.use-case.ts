@@ -6,8 +6,13 @@ import type { IUpdateAutomobileUseCase } from "../ports/in/update-automobile.use
 import type { IAutomobileRepositoryPort } from "../ports/out/automobile-repository.port.ts";
 
 export class UpdateAutomobileUseCase implements IUpdateAutomobileUseCase {
-  private readonly repository: IAutomobileRepositoryPort =
-    new AutomobileRepositoryAdapter();
+  private readonly repository: IAutomobileRepositoryPort;
+
+  constructor(
+    repository: IAutomobileRepositoryPort = new AutomobileRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+  }
 
   async execute(input: UpdateAutomobileInput): Promise<Automobile> {
     const existing = await this.repository.findById(input.id);

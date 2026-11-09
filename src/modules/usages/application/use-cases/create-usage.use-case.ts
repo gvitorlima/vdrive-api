@@ -12,14 +12,19 @@ import type { IDriverRepositoryPort } from "../../../drivers/application/ports/o
 import type { IAutomobileRepositoryPort } from "../../../automobiles/application/ports/out/automobile-repository.port.ts";
 
 export class CreateUsageUseCase implements ICreateUsageUseCase {
-  private readonly usageRepository: IUsageRepositoryPort =
-    new UsageRepositoryAdapter();
+  private readonly usageRepository: IUsageRepositoryPort;
+  private readonly driverRepository: IDriverRepositoryPort;
+  private readonly automobileRepository: IAutomobileRepositoryPort;
 
-  private readonly driverRepository: IDriverRepositoryPort =
-    new DriverRepositoryAdapter();
-
-  private readonly automobileRepository: IAutomobileRepositoryPort =
-    new AutomobileRepositoryAdapter();
+  constructor(
+    usageRepository: IUsageRepositoryPort = new UsageRepositoryAdapter(),
+    driverRepository: IDriverRepositoryPort = new DriverRepositoryAdapter(),
+    automobileRepository: IAutomobileRepositoryPort = new AutomobileRepositoryAdapter(),
+  ) {
+    this.usageRepository = usageRepository;
+    this.driverRepository = driverRepository;
+    this.automobileRepository = automobileRepository;
+  }
 
   async execute(input: CreateUsageInput): Promise<Usage> {
 

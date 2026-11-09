@@ -7,11 +7,16 @@ import type { IUsageRepositoryPort } from "../../../usages/application/ports/out
 import { UsageRepositoryAdapter } from "../../../usages/adapters/out/usage-repository.adapter.ts";
 
 export class ListDriversUseCase implements IListDriversUseCase {
-  private readonly repository: IDriverRepositoryPort =
-    new DriverRepositoryAdapter();
+  private readonly repository: IDriverRepositoryPort;
+  private readonly usageRepository: IUsageRepositoryPort;
 
-  private readonly usageRepository: IUsageRepositoryPort =
-    new UsageRepositoryAdapter();
+  constructor(
+    repository: IDriverRepositoryPort = new DriverRepositoryAdapter(),
+    usageRepository: IUsageRepositoryPort = new UsageRepositoryAdapter(),
+  ) {
+    this.repository = repository;
+    this.usageRepository = usageRepository;
+  }
 
   async execute(content: ListDriversInput): Promise<DriverOutput[]> {
     const drivers = await this.repository.list(content?.name);
