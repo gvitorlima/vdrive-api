@@ -1,0 +1,560 @@
+{
+  "info": {
+    "_postman_id": "c71a39f0-29c8-4720-9104-e5917d2da541",
+    "name": "vDrive API",
+    "description": "Coleção completa e validada de rotas para a **vDrive API**.\n\nA API gerencia o cadastro de automóveis, motoristas e o controle de utilizações de veículos seguindo a Arquitetura Hexagonal (Ports & Adapters).\n\n### Variáveis de Coleção:\n- `baseUrl`: URL base da API (padrão: `http://localhost:10003/api`)\n- `driverId`: ID de exemplo para testes de motorista\n- `automobileId`: ID de exemplo para testes de automóvel\n- `usageId`: ID de exemplo para teste de finalização de utilização",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Motoristas (Drivers)",
+      "description": "Endpoints para gerenciamento de motoristas.",
+      "item": [
+        {
+          "name": "Listar Motoristas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Retorna lista de motoristas\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "    pm.expect(jsonData.content).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/drivers",
+              "host": ["{{baseUrl}}"],
+              "path": ["drivers"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "Carlos",
+                  "description": "Filtro opcional por parte do nome (case-insensitive)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retorna todos os motoristas cadastrados com status `inUse` e histórico de utilizações.\n\n**Parâmetros de Query opcionais:**\n- `name`: filtra motoristas cujo nome contenha o texto informado."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Motorista por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Retorna os dados do motorista\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.have.property('id');",
+                  "    pm.expect(jsonData.content).to.have.property('nome');",
+                  "    pm.expect(jsonData.content).to.have.property('inUse');",
+                  "    pm.expect(jsonData.content).to.have.property('history');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/drivers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["drivers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{driverId}}",
+                  "description": "ID UUID do motorista"
+                }
+              ]
+            },
+            "description": "Retorna os detalhes de um motorista específico, indicando se ele está atualmente em posse de um veículo (`inUse`) e o histórico de utilizações."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Motorista",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Motorista criado com ID\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.have.property('id');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mariana Albuquerque Santos\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/drivers/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["drivers", "create"]
+            },
+            "description": "Cadastra um novo motorista no sistema.\n\n**Regras de validação (Zod):**\n- `name`: string obrigatória, mínimo de 8 caracteres e máximo de 128 caracteres."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Motorista",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Carlos Eduardo Silva Atualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/drivers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["drivers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{driverId}}",
+                  "description": "ID UUID do motorista a atualizar"
+                }
+              ]
+            },
+            "description": "Atualiza o nome de um motorista existente.\n\n**Regras de validação:**\n- `id`: parâmetro de rota obrigatório\n- `name`: string obrigatória de 8 a 128 caracteres."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Motorista",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 204 ou 409 se em uso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204, 409]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/drivers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["drivers", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{driverId}}",
+                  "description": "ID UUID do motorista a ser excluído"
+                }
+              ]
+            },
+            "description": "Exclui um motorista do sistema.\n\n**Atenção:**\n- Se o motorista possuir uma utilização em aberto (ativa), o servidor responderá com `409 Conflict` (ResourceInUseError).\n- Em caso de sucesso, retorna `204 No Content`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Automóveis (Automobiles)",
+      "description": "Endpoints para gerenciamento da frota de veículos.",
+      "item": [
+        {
+          "name": "Listar Automóveis",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Retorna lista de automóveis\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('content');",
+                  "    pm.expect(jsonData.content).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/automobiles",
+              "host": ["{{baseUrl}}"],
+              "path": ["automobiles"],
+              "query": [
+                {
+                  "key": "color",
+                  "value": "Prata",
+                  "description": "Filtro opcional por cor (case-insensitive)",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "Toyota",
+                  "description": "Filtro opcional por marca (case-insensitive)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retorna todos os automóveis cadastrados, indicando status `inUse` e histórico de utilizações.\n\n**Filtros disponíveis na Query:**\n- `color`: cor do veículo (ex: Prata, Preto, etc.)\n- `brand`: marca do veículo (ex: Toyota, Honda, etc.)"
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Automóvel por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Retorna automóvel e status\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.have.property('placa');",
+                  "    pm.expect(jsonData.content).to.have.property('inUse');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/automobiles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["automobiles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{automobileId}}",
+                  "description": "ID UUID do automóvel"
+                }
+              ]
+            },
+            "description": "Retorna os detalhes de um veículo específico pelo ID, informando se está em uso no momento e seu histórico completo."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Automóvel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Automóvel criado\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.have.property('id');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plate\": \"BRA2E19\",\n  \"color\": \"Azul Marinho\",\n  \"brand\": \"Hyundai\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/automobiles/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["automobiles", "create"]
+            },
+            "description": "Cadastra um novo automóvel na frota.\n\n**Regras de validação (Zod):**\n- `plate`: de 7 a 8 caracteres (suporta padrão antigo ABC1234 e Mercosul BRA2E19)\n- `color`: de 3 a 50 caracteres\n- `brand`: de 2 a 50 caracteres"
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Automóvel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plate\": \"ABC1234\",\n  \"color\": \"Cinza Metálico\",\n  \"brand\": \"Toyota\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/automobiles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["automobiles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{automobileId}}",
+                  "description": "ID UUID do veículo a atualizar"
+                }
+              ]
+            },
+            "description": "Atualiza os dados de placa, cor e marca de um automóvel existente."
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Automóvel",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 204 ou 409 se em uso\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204, 409]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/automobiles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["automobiles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{automobileId}}",
+                  "description": "ID UUID do automóvel a ser excluído"
+                }
+              ]
+            },
+            "description": "Exclui um automóvel da frota.\n\n**Atenção:**\n- Se o automóvel possuir uma utilização em andamento (ativa), o servidor responderá com `409 Conflict` (ResourceInUseError).\n- Retorna `204 No Content` quando excluído com sucesso."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Utilizações (Usages)",
+      "description": "Endpoints para controle de uso dos automóveis por motoristas.",
+      "item": [
+        {
+          "name": "Listar Utilizações",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Retorna array de utilizações\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usages",
+              "host": ["{{baseUrl}}"],
+              "path": ["usages"]
+            },
+            "description": "Retorna todas as utilizações cadastradas, tanto ativas (`data_termino: null`) quanto finalizadas."
+          },
+          "response": []
+        },
+        {
+          "name": "Iniciar Utilização",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"Utilização iniciada com data de início\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content).to.have.property('data_inicio');",
+                  "    pm.expect(jsonData.content.data_termino).to.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"driverId\": \"{{driverId}}\",\n  \"automobileId\": \"{{automobileId}}\",\n  \"reason\": \"Visita técnica ao cliente filial Alphaville\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usages/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["usages", "create"]
+            },
+            "description": "Registra o início do uso de um automóvel por um motorista.\n\n**Regras de Negócio e Validações:**\n- `driverId`: ID válido do motorista (retorna 404 se não existir)\n- `automobileId`: ID válido do automóvel (retorna 404 se não existir)\n- `reason`: de 5 a 500 caracteres\n- **Regra R2:** Um motorista que já possui uma utilização ativa NÃO pode utilizar outro automóvel simultaneamente (retorna `409 Conflict`).\n- **Regra R3:** Um automóvel que já está sendo utilizado NÃO pode ser utilizado por outro motorista simultaneamente (retorna `409 Conflict`)."
+          },
+          "response": []
+        },
+        {
+          "name": "Finalizar Utilização",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Data de término preenchida\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.content.data_termino).to.not.be.null;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usages/:id/finish",
+              "host": ["{{baseUrl}}"],
+              "path": ["usages", ":id", "finish"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{usageId}}",
+                  "description": "ID UUID da utilização ativa a ser finalizada"
+                }
+              ]
+            },
+            "description": "Finaliza a utilização de um automóvel, atribuindo a data/hora atual no campo `data_termino`.\n\n**Regras:**\n- Se a utilização já tiver sido finalizada anteriormente, retorna `400 Bad Request` com a mensagem indicando que a utilização já foi encerrada.\n- Se a utilização não for encontrada, retorna `404 Not Found`."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:10003/api",
+      "type": "string"
+    },
+    {
+      "key": "driverId",
+      "value": "a1b2c3d4-1234-5678-9abc-def012345678",
+      "type": "string"
+    },
+    {
+      "key": "automobileId",
+      "value": "1a2b3c4d-5678-90ab-cdef-1234567890ab",
+      "type": "string"
+    },
+    {
+      "key": "usageId",
+      "value": "a5d2e664-b01d-686e-0872-345678901234",
+      "type": "string"
+    }
+  ]
+}
