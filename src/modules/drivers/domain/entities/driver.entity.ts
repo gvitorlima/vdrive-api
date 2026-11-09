@@ -15,6 +15,22 @@ export class Driver {
     return new Driver(randomUUID(), name, false);
   }
 
+  public getId(): string {
+    return this.id;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public update(name: string): Driver {
+    return new Driver(this.id, name, this.wasSaved);
+  }
+
+  public toObject(): { id: string; nome: string } {
+    return { id: this.id, nome: this.name };
+  }
+
   public isSaved(): boolean {
     return this.wasSaved;
   }
